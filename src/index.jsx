@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col } from 'reactstrap';
+import React, { Component } from 'react'
+import { Container, Row, Col } from 'reactstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import Puzzle from "./puzzleArea.jsx"
 import Questions from "./questionArea.jsx"
 
