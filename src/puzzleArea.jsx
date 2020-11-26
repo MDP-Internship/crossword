@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Row, Col } from 'reactstrap'
+import { Container, Row, Col, CardColumns } from 'reactstrap'
 import data from "./data/word.js"
 
 
@@ -8,63 +8,76 @@ class PuzzleArea extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            across: data.filter(item => item.orientation === "across"),
-            down: data.filter(item => item.orientation === "down"),
-            answerMatris: []
-        };
-    };
-
-    componentWillMount() {
-        this.answerMatrisCreate(this.state.across);
-    }
-
-    answerMatrisCreate(across) {
-        var wordAcrossArray = [...Array(8).keys()].map(item => across.filter(across => across.starty === (item + 1)))
-        var letterAcrossArray = wordAcrossArray.map((item) => item.map(item => item.answer))
-        this.state.answerMatris = letterAcrossArray.map(item => item)
-    }
-
-    wordToLetter(answerMatris) {
-        return answerMatris.map(item => {
-            if (typeof item[1] !== "undefined")
+            clueX: data.filter(item => item.orientation === "across").map(item => {
                 return {
-                    result: item[0].concat(0, item[1]),
-                    count: item[0].length
+                    "coordinate": [item.startx, item.starty],
+                    "position": item.position,
+                    "answer": [...item.answer]
                 }
 
-            return {
-                result: item[0],
-                count: item[0].length
-            }
-        });
+            }),
+            clueY: data.filter(item => item.orientation === "down").map(item => {
+                return {
+                    "coordinate": [item.startx, item.starty],
+                    "position": item.position,
+                    "answer": [...item.answer]
+                }
 
+            }),
+            clueMatris: []
+        }
 
     }
 
+    column(row) {
+        var letter = row.map(item => item.answer)
+
+
+
+        return letter.join();
+    }
 
 
     render() {
-        const letterArray = this.wordToLetter(this.state.answerMatris)
-        return (
-            <Container>{
-                letterArray.map((letter) => {
+        var data = [];
+        for (let indexY = 0; indexY < 8; indexY++) {
+            var row = this.state.clueX
+                .filter(item => item.coordinate[1] - 1 === indexY)
+                .map(item => {
+                    return {
+                        position: item.position,
+                        answer: item.answer.map(letter => letter),
+                        coordinate: item.coordinate,
 
-                    return <Row>{
-                        [...letter.result].map((item, index) => {
-                            if ((index) === letter.count)
-                                return <Square bgColor="bg-danger"></Square>
-                            return <Square letter={item}></Square>
+                    }
+                })
 
-                        })
-                    }</Row>
+            data.push(this.column(row))
 
-                }
+        }
 
-                )
-            }</Container>
-        );
+
+
+
+        console.table(data);
+
+
+        /* this.state.clueY.forEach((word, indexY) => {
+            var data = [...word.answer].map(item => { return { letter: item, clueY: word.position } })
+            matris[indexY].push(data)
+
+        }) */
+
+        // console.table(matris)
+
+        return 0;
     }
+
+
 }
+
+
+
 
 class Square extends Component {
     constructor(props) {
