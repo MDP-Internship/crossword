@@ -30,17 +30,40 @@ class PuzzleArea extends Component {
     }
 
     column(row) {
-        var letter = row.map(item => item.answer)
+        let rowLetter = [];
+        var letter = row.map(item => item.answer).join().replace(/,/g, "");
+
+        var coordinate = row.map(item => {
+            return {
+                startx: item.coordinate[0],
+                length: item.answer.length
+            }
+        }).map(item => {
+            let array = [...Array(item.length).keys()].map(element => element + item.startx - 1)
+            return array;
+        }).join().replace(/,/g, "")
 
 
 
-        return letter.join();
+        for (let index = 0; index < coordinate.length; index++) {
+            rowLetter[coordinate[index]] = letter[index]
+        }
+        for (let index = 0; index < 8; index++)
+            if (typeof rowLetter[index] === "undefined")
+                rowLetter[index] = 0
+
+
+        return rowLetter
     }
+
+
+
+
 
 
     render() {
         var data = [];
-        for (let indexY = 0; indexY < 8; indexY++) {
+        for (let indexY = 0; indexY < 7; indexY++) {
             var row = this.state.clueX
                 .filter(item => item.coordinate[1] - 1 === indexY)
                 .map(item => {
@@ -62,13 +85,9 @@ class PuzzleArea extends Component {
         console.table(data);
 
 
-        /* this.state.clueY.forEach((word, indexY) => {
-            var data = [...word.answer].map(item => { return { letter: item, clueY: word.position } })
-            matris[indexY].push(data)
 
-        }) */
 
-        // console.table(matris)
+
 
         return 0;
     }
