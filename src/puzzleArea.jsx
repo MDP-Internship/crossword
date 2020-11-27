@@ -26,8 +26,12 @@ class PuzzleArea extends Component {
             }),
             clueMatris: []
         }
-
     }
+    componentDidMount() {
+        this.row(this.state.clueX)
+    }
+
+
 
     column(row) {
         let rowLetter = [];
@@ -44,7 +48,6 @@ class PuzzleArea extends Component {
         }).join().replace(/,/g, "")
 
 
-
         for (let index = 0; index < coordinate.length; index++) {
             rowLetter[coordinate[index]] = letter[index]
         }
@@ -52,19 +55,13 @@ class PuzzleArea extends Component {
             if (typeof rowLetter[index] === "undefined")
                 rowLetter[index] = 0
 
-
         return rowLetter
     }
 
-
-
-
-
-
-    render() {
-        var data = [];
+    row(clueX) {
+        var result = []
         for (let indexY = 0; indexY < 7; indexY++) {
-            var row = this.state.clueX
+            var row = clueX
                 .filter(item => item.coordinate[1] - 1 === indexY)
                 .map(item => {
                     return {
@@ -74,15 +71,21 @@ class PuzzleArea extends Component {
 
                     }
                 })
-
-            data.push(this.column(row))
-
+            result.push(this.column(row))
         }
 
+        this.setState({ clueMatris: result })
+
+    }
 
 
 
-        console.table(data);
+
+    render() {
+
+
+
+        console.table(this.state.clueMatris);
 
 
 
