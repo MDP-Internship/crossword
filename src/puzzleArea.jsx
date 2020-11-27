@@ -35,8 +35,15 @@ class PuzzleArea extends Component {
 
     column(row) {
         let rowLetter = [];
-        var letter = row.map(item => item.answer).join().replace(/,/g, "");
 
+        var letter = row.map(item => item.answer).join().replace(/,/g, "");
+        var position = row.map(item => {
+            var result = [...item.answer].map(element => { return { char: element, position: item.position } })
+            return result;
+        })
+        var letterPositon = [].concat.apply([], position);
+
+        console.log(letterPositon);
         var coordinate = row.map(item => {
             return {
                 startx: item.coordinate[0],
@@ -48,8 +55,12 @@ class PuzzleArea extends Component {
         }).join().replace(/,/g, "")
 
 
+
         for (let index = 0; index < coordinate.length; index++) {
-            rowLetter[coordinate[index]] = letter[index]
+            rowLetter[coordinate[index]] = {
+                char: letterPositon[index].char,
+                position: letterPositon[index].position
+            }
         }
         for (let index = 0; index < 8; index++)
             if (typeof rowLetter[index] === "undefined")
@@ -60,7 +71,7 @@ class PuzzleArea extends Component {
 
     row(clueX) {
         var result = []
-        for (let indexY = 0; indexY < 7; indexY++) {
+        for (let indexY = 0; indexY < 8; indexY++) {
             var row = clueX
                 .filter(item => item.coordinate[1] - 1 === indexY)
                 .map(item => {
