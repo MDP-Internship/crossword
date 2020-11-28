@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { Container, Row, Col, CardColumns } from 'reactstrap'
-import data from "./data/word.js"
+import data from "./data/word"
 import MatrisConvert from './matrisConvert';
-
 
 class PuzzleArea extends Component {
     constructor(props) {
@@ -16,7 +15,6 @@ class PuzzleArea extends Component {
     }
 
     render() {
-        console.table(this.state.clueMatris)
         return <Container>
             {
                 this.state.clueMatris.map(item => {

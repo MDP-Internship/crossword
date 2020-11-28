@@ -10,10 +10,10 @@ export default class CrosswordPage extends Component {
     return (
       <Container className="mt-5 p-0">
         <Row>
-          <Col md="6 " className="bg-light">
+          <Col md="6 " className="">
             <Puzzle />
           </Col>
-          <Col md="4" className="bg-primary">
+          <Col md="4" className="">
             <Questions />
           </Col>
         </Row>
