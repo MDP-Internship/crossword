@@ -1,129 +1,57 @@
 import React, { Component } from 'react'
 import { Container, Row, Col, CardColumns } from 'reactstrap'
 import data from "./data/word.js"
-
+import MatrisConvert from './matrisConvert';
 
 
 class PuzzleArea extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            clueX: data.filter(item => item.orientation === "across").map(item => {
-                return {
-                    "coordinate": [item.startx, item.starty],
-                    "position": item.position,
-                    "answer": [...item.answer]
-                }
-
-            }),
-            clueY: data.filter(item => item.orientation === "down").map(item => {
-                return {
-                    "coordinate": [item.startx, item.starty],
-                    "position": item.position,
-                    "answer": [...item.answer]
-                }
-
-            }),
             clueMatris: []
         }
     }
     componentDidMount() {
-        this.row(this.state.clueX)
+        this.setState({ clueMatris: MatrisConvert.result(data) })
     }
-
-
-
-    column(row) {
-        let rowLetter = [];
-
-        var letter = row.map(item => item.answer).join().replace(/,/g, "");
-        var position = row.map(item => {
-            var result = [...item.answer].map(element => { return { char: element, position: item.position } })
-            return result;
-        })
-        var letterPositon = [].concat.apply([], position);
-
-        console.log(letterPositon);
-        var coordinate = row.map(item => {
-            return {
-                startx: item.coordinate[0],
-                length: item.answer.length
-            }
-        }).map(item => {
-            let array = [...Array(item.length).keys()].map(element => element + item.startx - 1)
-            return array;
-        }).join().replace(/,/g, "")
-
-
-
-        for (let index = 0; index < coordinate.length; index++) {
-            rowLetter[coordinate[index]] = {
-                char: letterPositon[index].char,
-                position: letterPositon[index].position
-            }
-        }
-        for (let index = 0; index < 8; index++)
-            if (typeof rowLetter[index] === "undefined")
-                rowLetter[index] = 0
-
-        return rowLetter
-    }
-
-    row(clueX) {
-        var result = []
-        for (let indexY = 0; indexY < 8; indexY++) {
-            var row = clueX
-                .filter(item => item.coordinate[1] - 1 === indexY)
-                .map(item => {
-                    return {
-                        position: item.position,
-                        answer: item.answer.map(letter => letter),
-                        coordinate: item.coordinate,
-
-                    }
-                })
-            result.push(this.column(row))
-        }
-
-        this.setState({ clueMatris: result })
-
-    }
-
-
-
 
     render() {
-
-
-
-        console.table(this.state.clueMatris);
-
-
-
-
-
-
-        return 0;
+        console.table(this.state.clueMatris)
+        return <Container>
+            {
+                this.state.clueMatris.map(item => {
+                    return <Row>
+                        {
+                            item.map(element => <Square letter={element.letter} clueX={element.clueX} clueY={element.clueY}></Square>)
+                        }
+                    </Row>
+                })
+            }
+        </Container>
     }
-
-
 }
-
-
 
 
 class Square extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            black: ""
+        };
+
     }
+    componentDidMount() {
+        // isBlack(this.props.letter)
+    }
+
+    isBlack = (letter) => letter === 0 ? "bg-dark" : "bg-white"
+
+
 
     render() {
         return <Col className="embed-responsive embed-responsive-1by1 text-center">
-            <div className={"embed-responsive-item cell " + this.props.bgColor}>
-
+            <div className={"embed-responsive-item cell " + this.isBlack(this.props.letter)}>
                 {this.props.letter}
-
             </div>
         </Col>
 
